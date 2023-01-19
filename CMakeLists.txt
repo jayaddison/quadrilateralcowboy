@@ -59,35 +59,8 @@ IF(NOT WIN32)
 	SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 ENDIF()
 
-# Include Directories
-INCLUDE_DIRECTORIES(. sound/OggVorbis/vorbissrc/)
-
 # Source Lists
 SET(QC_SRC
-	sound/OggVorbis/oggsrc/bitwise.c
-	sound/OggVorbis/oggsrc/framing.c
-	sound/OggVorbis/vorbissrc/analysis.c
-	sound/OggVorbis/vorbissrc/bitrate.c
-	sound/OggVorbis/vorbissrc/block.c
-	sound/OggVorbis/vorbissrc/codebook.c
-	sound/OggVorbis/vorbissrc/envelope.c
-	sound/OggVorbis/vorbissrc/floor0.c
-	sound/OggVorbis/vorbissrc/floor1.c
-	sound/OggVorbis/vorbissrc/info.c
-	sound/OggVorbis/vorbissrc/lookup.c
-	sound/OggVorbis/vorbissrc/lpc.c
-	sound/OggVorbis/vorbissrc/lsp.c
-	sound/OggVorbis/vorbissrc/mapping0.c
-	sound/OggVorbis/vorbissrc/mdct.c
-	sound/OggVorbis/vorbissrc/psy.c
-	sound/OggVorbis/vorbissrc/registry.c
-	sound/OggVorbis/vorbissrc/res0.c
-	sound/OggVorbis/vorbissrc/sharedbook.c
-	sound/OggVorbis/vorbissrc/smallft.c
-	sound/OggVorbis/vorbissrc/synthesis.c
-	sound/OggVorbis/vorbissrc/vorbisenc.c
-	sound/OggVorbis/vorbissrc/vorbisfile.c
-	sound/OggVorbis/vorbissrc/windowvb.c
 	renderer/Cinematic.cpp
 	renderer/GuiModel.cpp
 	renderer/Image_files.cpp
@@ -502,6 +475,7 @@ IF(APPLE)
 ELSEIF(NOT WIN32)
 	TARGET_LINK_LIBRARIES(qc PUBLIC jpeg)
 	TARGET_LINK_LIBRARIES(qc PUBLIC openal)
+	TARGET_LINK_LIBRARIES(qc PUBLIC vorbisfile)
 ENDIF()
 IF(WIN32)
 	TARGET_LINK_LIBRARIES(qc PUBLIC
