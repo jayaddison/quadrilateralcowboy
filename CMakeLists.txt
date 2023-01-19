@@ -55,50 +55,6 @@ INCLUDE_DIRECTORIES(. sound/OggVorbis/vorbissrc/)
 
 # Source Lists
 SET(QC_SRC
-	renderer/jpeg-6/jcapimin.c
-	renderer/jpeg-6/jccoefct.c
-	renderer/jpeg-6/jccolor.c
-	renderer/jpeg-6/jcdctmgr.c
-	renderer/jpeg-6/jchuff.c
-	renderer/jpeg-6/jcinit.c
-	renderer/jpeg-6/jcmainct.c
-	renderer/jpeg-6/jcmarker.c
-	renderer/jpeg-6/jcmaster.c
-	renderer/jpeg-6/jcomapi.c
-	renderer/jpeg-6/jcparam.c
-	renderer/jpeg-6/jcphuff.c
-	renderer/jpeg-6/jcprepct.c
-	renderer/jpeg-6/jcsample.c
-	renderer/jpeg-6/jdapimin.c
-	renderer/jpeg-6/jdapistd.c
-	renderer/jpeg-6/jdatadst.c
-	renderer/jpeg-6/jdatasrc.c
-	renderer/jpeg-6/jdcoefct.c
-	renderer/jpeg-6/jdcolor.c
-	renderer/jpeg-6/jddctmgr.c
-	renderer/jpeg-6/jdhuff.c
-	renderer/jpeg-6/jdinput.c
-	renderer/jpeg-6/jdmainct.c
-	renderer/jpeg-6/jdmarker.c
-	renderer/jpeg-6/jdmaster.c
-	renderer/jpeg-6/jdmerge.c
-	renderer/jpeg-6/jdphuff.c
-	renderer/jpeg-6/jdpostct.c
-	renderer/jpeg-6/jdsample.c
-	renderer/jpeg-6/jdtrans.c
-	renderer/jpeg-6/jerror.c
-	renderer/jpeg-6/jfdctflt.c
-	renderer/jpeg-6/jfdctfst.c
-	renderer/jpeg-6/jfdctint.c
-	renderer/jpeg-6/jidctflt.c
-	renderer/jpeg-6/jidctfst.c
-	renderer/jpeg-6/jidctint.c
-	renderer/jpeg-6/jidctred.c
-	renderer/jpeg-6/jmemmgr.c
-	renderer/jpeg-6/jmemnobs.c
-	renderer/jpeg-6/jquant1.c
-	renderer/jpeg-6/jquant2.c
-	renderer/jpeg-6/jutils.c
 	sound/OggVorbis/oggsrc/bitwise.c
 	sound/OggVorbis/oggsrc/framing.c
 	sound/OggVorbis/vorbissrc/analysis.c
@@ -496,6 +452,7 @@ IF(APPLE)
 	FIND_LIBRARY(COREAUDIO NAMES CoreAudio)
 	TARGET_LINK_LIBRARIES(qc PUBLIC objc ${OPENGL} ${OPENAL} ${COCOA} ${IOKIT} ${COREAUDIO})
 ELSE()
+	TARGET_LINK_LIBRARIES(qc PUBLIC jpeg)
 	TARGET_LINK_LIBRARIES(qc PUBLIC openal)
 ENDIF()
 TARGET_LINK_LIBRARIES(qc PUBLIC dl pthread)
