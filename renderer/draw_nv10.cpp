@@ -291,7 +291,7 @@ static void RB_RenderInteraction( const drawSurf_t *surf ) {
 
 		if ( surfaceStage->lighting == SL_DIFFUSE ) {
 			if ( !lastBumpStage ) {
-				common->Printf( "shader %s: diffuse stage without a preceeding bumpmap stage\n",
+				common->Printf( "shader %s: diffuse stage without a preceding bumpmap stage\n",
 					surfaceShader->GetName() );
 				continue;
 			}
@@ -316,7 +316,7 @@ static void RB_RenderInteraction( const drawSurf_t *surf ) {
 			}
 
 			if ( !lastBumpStage ) {
-				common->Printf( "shader %s: specular stage without a preceeding bumpmap stage\n",
+				common->Printf( "shader %s: specular stage without a preceding bumpmap stage\n",
 					surfaceShader->GetName() );
 				continue;
 			}
