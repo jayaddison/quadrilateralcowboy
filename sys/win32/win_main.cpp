@@ -35,7 +35,9 @@ If you have questions concerning this license or the applicable additional terms
 #include <direct.h>
 #include <io.h>
 #include <conio.h>
+#if 0 // flibit removed this include, VS2022 was _not_ happy about it
 #include <mapi.h>
+#endif
 #include <ShellAPI.h>
 
 #ifndef __MRC__
@@ -47,10 +49,6 @@ If you have questions concerning this license or the applicable additional terms
 #include "win_local.h"
 #include "rc/CreateResourceIDs.h"
 #include "../../renderer/tr_local.h"
-
-#ifdef STEAM
-#include "steam_api.h"
-#endif
 
 idCVar Win32Vars_t::sys_arch( "sys_arch", "", CVAR_SYSTEM | CVAR_INIT, "" );
 idCVar Win32Vars_t::sys_cpustring( "sys_cpustring", "detect", CVAR_SYSTEM | CVAR_INIT, "" );
@@ -1259,6 +1257,7 @@ EmailCrashReport
 ====================
 */
 void EmailCrashReport( LPSTR messageText ) {
+#if 0 // QC disables the exception handler anyway -flibit
 	LPMAPISENDMAIL	MAPISendMail;
 	MapiMessage		message;
 	static int lastEmailTime = 0;
@@ -1299,6 +1298,7 @@ void EmailCrashReport( LPSTR messageText ) {
 		}
 		FreeLibrary( mapi );
 	}
+#endif
 }
 
 int Sys_FPU_PrintStateFlags( char *ptr, int ctrl, int stat, int tags, int inof, int inse, int opof, int opse );

@@ -30,7 +30,6 @@ If you have questions concerning this license or the applicable additional terms
 #pragma hdrstop
 
 #ifdef STEAM
-#include "steam_api.h"
 #include "steamstats.h"
 #include "steamremote.h"
 #include "steamleaderboard.h"
@@ -178,6 +177,7 @@ void TestGameAPI( void ) {
 	gameImport_t testImport;
 	gameExport_t testExport;
 
+	testImport.version				= GAME_API_VERSION;
 	testImport.sys						= ::sys;
 	testImport.common					= ::common;
 	testImport.cmdSystem				= ::cmdSystem;

@@ -281,6 +281,17 @@ static void R_CheckCvars( void ) {
 		R_SetColorMappings();
 	}
 
+	if ( r_gammaInShader.IsModified() ) {
+		// reload shaders so they either add or remove the code for setting gamma/brightness in shader
+		R_ReloadARBPrograms_f( idCmdArgs() );
+
+		if ( r_gammaInShader.GetBool() ) {
+			GLimp_ResetGamma(); // reset hardware gamma
+		} else {
+			R_SetColorMappings();
+		}
+	}
+
 	// check for changes to logging state
 	GLimp_EnableLogging( r_logFile.GetInteger() != 0 );
 }
@@ -291,6 +302,40 @@ idRenderSystemLocal::idRenderSystemLocal
 =============
 */
 idRenderSystemLocal::idRenderSystemLocal( void ) {
+
+	registered = false;
+	takingScreenshot = false;
+	frameCount = 0;
+	viewCount = 0;
+	staticAllocCount = 0;
+	frameShaderTime = 0.0f;
+	viewportOffset[0] = 0;
+	viewportOffset[1] = 0;
+	tiledViewport[0] = 0;
+	tiledViewport[1] = 0;
+	backEndRenderer = BE_BAD;
+	backEndRendererHasVertexPrograms = false;
+	backEndRendererMaxLight = 0.0f;
+	memset( &ambientLightVector, 0, sizeof(ambientLightVector) );
+	sortOffset = 0.0f;
+	primaryWorld = NULL;
+	primaryView = NULL;
+	defaultMaterial = NULL;
+	testImage = NULL;
+	testVideo = NULL;
+	testVideoStartTime = 0.0f;
+	ambientCubeImage = NULL;
+	viewDef = NULL;
+	logFile = NULL;
+	stencilIncr = 0;
+	stencilDecr = 0;
+	memset( renderCrops, 0, sizeof(renderCrops) );
+	currentRenderCrop = 0;
+	guiRecursionLevel = 0;
+	guiModel = NULL;
+	demoGuiModel = NULL;
+	memset( gammaTable, 0, sizeof(gammaTable) );
+
 	Clear();
 }
 

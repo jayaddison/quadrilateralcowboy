@@ -821,6 +821,7 @@ extern idCVar r_glDriver;				// "opengl32", etc
 extern idCVar r_mode;					// video mode number
 extern idCVar r_displayRefresh;			// optional display refresh rate option for vid mode
 extern idCVar r_fullscreen;				// 0 = windowed, 1 = full screen
+extern idCVar r_fullscreenDesktop;		// 0: 'real' fullscreen mode 1: keep resolution 'desktop' fullscreen mode
 extern idCVar r_multiSamples;			// number of antialiasing samples
 
 extern idCVar r_ignore;					// used for random debugging without defining new vars
@@ -842,6 +843,7 @@ extern idCVar r_flareSize;				// scale the flare deforms from the material def
 
 extern idCVar r_gamma;					// changes gamma tables
 extern idCVar r_brightness;				// changes gamma tables
+extern idCVar r_gammaInShader;			// set gamma+brightness in shader instead of modifying system gamma tables
 
 extern idCVar r_renderer;				// arb, nv10, nv20, r200, gl2, etc
 
@@ -1073,6 +1075,7 @@ typedef struct {
 	int			width;
 	int			height;
 	bool		fullScreen;
+	bool		fullScreenDesktop;
 	bool		stereo;
 	int			displayHz;
 	int			multiSamples;
@@ -1102,6 +1105,8 @@ void		GLimp_SetGamma( unsigned short red[256],
 // These are now taken as 16 bit values, so we can take full advantage
 // of dacs with >8 bits of precision
 
+void		GLimp_ResetGamma();
+// resets the gamma to what it was at startup
 
 bool		GLimp_SpawnRenderThread( void (*function)( void ) );
 // Returns false if the system only has a single processor

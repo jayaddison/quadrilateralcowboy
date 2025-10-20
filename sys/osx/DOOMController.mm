@@ -488,6 +488,8 @@ const char *Sys_GetProcessorString( void ) {
 	return "x86 CPU with MMX/SSE/SSE2/SSE3 extensions";
 #elif defined(__x86_64__)
 	return "x86_64 CPU";
+#elif defined(__aarch64__)
+	return "AArch64 CPU";
 #else
 	#error
 	return NULL;
@@ -681,7 +683,7 @@ double Sys_ClockTicksPerSecond(void) {
     mach_port_t masterPort;
 	CFMutableDictionaryRef matchDict = nil;
 	io_iterator_t itThis;
-	io_service_t service = nil;
+	io_service_t service = 0;
 	
     if (IOMasterPort(MACH_PORT_NULL, &masterPort))
 		goto bail;
@@ -693,7 +695,7 @@ double Sys_ClockTicksPerSecond(void) {
 	service = IOIteratorNext(itThis);
     while(service)
     {
-		io_service_t ioCpu = NULL;
+		io_service_t ioCpu = 0;
 		if (IORegistryEntryGetChildEntry(service, kIODeviceTreePlane, &ioCpu))
 			goto bail;
 		
@@ -1001,7 +1003,7 @@ void Sys_AsyncThread( void ) {
 }
 
 
-#if defined(__ppc__)
+#if defined(__ppc__) || defined(__aarch64__)
 
 /*
  ================

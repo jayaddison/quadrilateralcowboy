@@ -179,8 +179,8 @@ bool GLimp_Init(glimpParms_t parms) {
 #endif
 
 		window = SDL_CreateWindow(GAME_NAME,
-									SDL_WINDOWPOS_UNDEFINED,
-									SDL_WINDOWPOS_UNDEFINED,
+									SDL_WINDOWPOS_CENTERED,
+									SDL_WINDOWPOS_CENTERED,
 									parms.width, parms.height, flags);
 
 		// set the icon for linux.
@@ -201,9 +201,15 @@ bool GLimp_Init(glimpParms_t parms) {
 
 #ifdef __WINDOWS__ // HACK: windows fullscreeen doesn't get focus properly, this is a work around.
 		// Switch to fullscreen now if needed, this works around a weird focus bug in SDL2
-		// TODO: add SDL_WINDOW_FULLSCREEN_DESKTOP option.
 		if (parms.fullScreen)
-			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+		{
+			SDL_SetWindowFullscreen(
+				window,
+				parms.fullScreenDesktop ?
+					SDL_WINDOW_FULLSCREEN_DESKTOP :
+					SDL_WINDOW_FULLSCREEN
+			);
+		}
 
 		// flush out the event queue so we set the hWnd etc. for id
 		win32.hWnd = NULL;
@@ -311,6 +317,12 @@ void GLimp_SwapBuffers() {
 #endif
 }
 
+static bool gammaOrigError = false;
+static bool gammaOrigSet = false;
+static unsigned short gammaOrigRed[256];
+static unsigned short gammaOrigGreen[256];
+static unsigned short gammaOrigBlue[256];
+
 /*
 =================
 GLimp_SetGamma
@@ -322,8 +334,43 @@ void GLimp_SetGamma(unsigned short red[256], unsigned short green[256], unsigned
 		return;
 	}
 
+	if ( !gammaOrigSet ) {
+		gammaOrigSet = true;
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+		if ( SDL_GetWindowGammaRamp( window, gammaOrigRed, gammaOrigGreen, gammaOrigBlue ) == -1 ) {
+#else
+		if ( SDL_GetGammaRamp( gammaOrigRed, gammaOrigGreen, gammaOrigBlue ) == -1 ) {
+#endif
+			gammaOrigError = true;
+			common->Warning( "Failed to get Gamma Ramp: %s\n", SDL_GetError() );
+		}
+	}
+
 	if (SDL_SetWindowGammaRamp(window, red, green, blue))
 		common->Warning("Couldn't set gamma ramp: %s", SDL_GetError());
+}
+
+/*
+=================
+GLimp_ResetGamma
+
+Restore original system gamma setting
+=================
+*/
+void GLimp_ResetGamma() {
+	if( gammaOrigError ) {
+		common->Warning( "Can't reset hardware gamma because getting the Gamma Ramp at startup failed!\n" );
+		common->Warning( "You might have to restart the game for gamma/brightness in shaders to work properly.\n" );
+		return;
+	}
+
+	if( gammaOrigSet ) {
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+		SDL_SetWindowGammaRamp( window, gammaOrigRed, gammaOrigGreen, gammaOrigBlue );
+#else
+		SDL_SetGammaRamp( gammaOrigRed, gammaOrigGreen, gammaOrigBlue );
+#endif
+	}
 }
 
 /*
